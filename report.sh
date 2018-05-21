@@ -21,7 +21,7 @@ echo -e "MX Record: \c"
 dig +short $DOMAIN MX && echo
 }
 
-function SCODELOOKUP {
+function LOOKUPWPSCODE {
 # Retrieves the status code from visiting $DOMAIN/wp-login.php and saves it into a variable called $STATUSCODE
 STATUSCODE=$(curl -o /dev/null --silent --head --write-out '%{http_code}\n' http://$DOMAIN/wp-login.php)
 }
@@ -65,11 +65,11 @@ then
 		echo "Testing: $DOMAIN ..." && echo
 
 		# To understand the functions below see the functions toward the top of this file
-
+		
 		DNSTESTS 
 
 		# WordPress Tests
-		SCODELOOKUP
+		LOOKUPWPSCODE
 		LOOKUPLIC
 		LOOKUPWPINDEX
 		WORDPRESSRESULT
@@ -94,7 +94,7 @@ echo && echo "Analysing $DOMAIN ..." && echo
 DNSTESTS
 
 # WordPress Tests
-SCODELOOKUP
+LOOKUPWPSCODE
 LOOKUPLIC
 LOOKUPWPINDEX
 WORDPRESSRESULT
