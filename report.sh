@@ -5,7 +5,6 @@
 # - Nameservers
 # - A Record
 # - MX Record
-# 
 
 # Variables
 
