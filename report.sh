@@ -68,12 +68,10 @@ then
 
 		DNSTESTS 
 
+		# WordPress Tests
 		SCODELOOKUP
-
 		LOOKUPLIC
-	
 		LOOKUPWPINDEX
-
 		WORDPRESSRESULT
 
 		echo "=====================================================" && echo
@@ -95,12 +93,10 @@ echo && echo "Analysing $DOMAIN ..." && echo
 
 DNSTESTS
 
+# WordPress Tests
 SCODELOOKUP
-
 LOOKUPLIC
-
 LOOKUPWPINDEX
-
 WORDPRESSRESULT
 
 exit 0
