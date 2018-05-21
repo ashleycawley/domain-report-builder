@@ -46,6 +46,21 @@ if [ $STATUSCODE == "200" ] || [ $WPLIC == "0" ] || [ $WPINDEX == "0" ]
         fi
 }
 
+function DRUPALGREP {
+# Checks to see if "Drupal" exists on the frontpage
+wget -q http://$DOMAIN/ -O /tmp/drupal.html && grep -q "Drupal" /tmp/drupal.html
+DRUPAL=$(echo $?)
+rm -f /tmp/drupal.html
+}
+
+function DRUPALRESULT {
+if [ $DRUPAL == '0' ]
+then
+	echo -e "\e[32mDrupal\c" && echo -e "\e[39m has been detected." && echo
+fi
+}
+
+
 # Script
 
 # Clears the screen for a clean working area
@@ -74,6 +89,10 @@ then
 		LOOKUPWPINDEX
 		WORDPRESSRESULT
 
+		# Drupal Tests
+		DRUPALGREP
+		DRUPALRESULT
+
 		echo "=====================================================" && echo
 
 done < domains.txt
@@ -98,5 +117,9 @@ LOOKUPWPSCODE
 LOOKUPLIC
 LOOKUPWPINDEX
 WORDPRESSRESULT
+
+# Drupal Tests
+DRUPALGREP
+DRUPALRESULT
 
 exit 0
