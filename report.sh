@@ -66,6 +66,7 @@ fi
 # Clears the screen for a clean working area
 echo -e "\f"
 
+# Performs a test to see if a domains.txt file exists and if it does and it is greater than 5 bytes it uses it
 if [ `wc -c domains.txt 2>/dev/null | awk '{print $1}'` -gt '5' ] 2>/dev/null
 then
 
@@ -75,12 +76,10 @@ then
 
 	while read DOMAIN
 	do
-
 		
 		echo "Testing: $DOMAIN ..." && echo
 
-		# To understand the functions below see the functions toward the top of this file
-		
+		# To understand the functions below see the functions and their comments toward the top of this file
 		DNSTESTS 
 
 		# WordPress Tests
@@ -95,7 +94,7 @@ then
 
 		echo "=====================================================" && echo
 
-done < domains.txt
+	done < domains.txt
 
 	echo "Archiving domains.txt file by renaming it to be domains.old ..." && echo && sleep 2
 	mv domains.txt domains.old
@@ -108,8 +107,7 @@ read -p "Domain Name: " DOMAIN
 
 echo && echo "Analysing $DOMAIN ..." && echo
 
-# To understand the functions below see the functions toward the top of this file
-
+# To understand the functions below see the functions and their comments toward the top of this file
 DNSTESTS
 
 # WordPress Tests
