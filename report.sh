@@ -11,34 +11,34 @@
 # Functions
 function DNSTESTS {
 
-# Tests to see domain is a .com domain in prep for doing a .com NS Lookup
-echo $DOMAIN | grep -q -i ".com"
-COM=$(echo $?)
+	# Tests to see domain is a .com domain in prep for doing a .com NS Lookup
+	echo $DOMAIN | grep -q -i ".com"
+	COM=$(echo $?)
 
-if [ `echo $COM` == '0' ]
-then
-	echo "Nameserver Records:"
-	whois $DOMAIN | awk -F: '/Name Server/{print $2}'
-	echo
-fi
+	if [ `echo $COM` == '0' ]
+	then
+		echo "Nameserver Records:"
+		whois $DOMAIN | awk -F: '/Name Server/{print $2}'
+		echo
+	fi
 
-# Tests to see if domain is a .co.uk domain in prep for doing a .co.uk NS Lookup
-echo $DOMAIN | grep -q -i ".co.uk"
-COUK=$(echo $?)
-if [ `echo $COUK` == '0' ]
-then
-	whois $DOMAIN | grep -A3 servers
-fi
+	# Tests to see if domain is a .co.uk domain in prep for doing a .co.uk NS Lookup
+	echo $DOMAIN | grep -q -i ".co.uk"
+	COUK=$(echo $?)
+	if [ `echo $COUK` == '0' ]
+	then
+		whois $DOMAIN | grep -A3 servers
+	fi
 
-# De-activating this NS check below, because it just gets the stealth NS not the true NS
-#echo -e "Nameserver Records:"
-#dig +short $DOMAIN NS && echo
+	# De-activating this NS check below, because it just gets the stealth NS not the true NS
+	#echo -e "Nameserver Records:"
+	#dig +short $DOMAIN NS && echo
 
-echo -e "A Record: \c"
-dig +short $DOMAIN A && echo
+	echo -e "A Record: \c"
+	dig +short $DOMAIN A && echo
 
-echo -e "MX Record: \c"
-dig +short $DOMAIN MX && echo
+	echo -e "MX Record: \c"
+	dig +short $DOMAIN MX && echo
 }
 
 function DOTCOMNSLOOKUP {
@@ -46,42 +46,42 @@ function DOTCOMNSLOOKUP {
 }
 
 function LOOKUPWPSCODE {
-# Retrieves the status code from visiting $DOMAIN/wp-login.php and saves it into a variable called $STATUSCODE
-STATUSCODE=$(curl -o /dev/null --silent --head --write-out '%{http_code}\n' http://$DOMAIN/wp-login.php)
+	# Retrieves the status code from visiting $DOMAIN/wp-login.php and saves it into a variable called $STATUSCODE
+	STATUSCODE=$(curl -o /dev/null --silent --head --write-out '%{http_code}\n' http://$DOMAIN/wp-login.php)
 }
 
 function LOOKUPLIC {
-# Checks to see if a licencse.txt file exists and whether it contains the word WordPress
-curl --silent http://$DOMAIN/license.txt | grep -q "WordPress"
-WPLIC=$(echo $?)
+	# Checks to see if a licencse.txt file exists and whether it contains the word WordPress
+	curl --silent http://$DOMAIN/license.txt | grep -q "WordPress"
+	WPLIC=$(echo $?)
 }
 
 function LOOKUPWPINDEX {
-# Checks to see if a licencse.txt file exists and whether it contains the word WordPress
-curl --silent http://$DOMAIN/ | grep -q "WordPress"
-WPINDEX=$(echo $?)
+	# Checks to see if a licencse.txt file exists and whether it contains the word WordPress
+	curl --silent http://$DOMAIN/ | grep -q "WordPress"
+	WPINDEX=$(echo $?)
 }
 
 function WORDPRESSRESULT {
-if [ $STATUSCODE == "200" ] || [ $WPLIC == "0" ] || [ $WPINDEX == "0" ]
-        then
-                echo -e "\e[32mWordPress\c" && echo -e "\e[39m has been detected." && echo
+	if [ $STATUSCODE == "200" ] || [ $WPLIC == "0" ] || [ $WPINDEX == "0" ]
+			then
+					echo -e "\e[32mWordPress\c" && echo -e "\e[39m has been detected." && echo
 
-        fi
+			fi
 }
 
 function DRUPALGREP {
-# Checks to see if "Drupal" exists on the frontpage
-wget -q http://$DOMAIN/ -O /tmp/drupal.html && grep -q "Drupal" /tmp/drupal.html
-DRUPAL=$(echo $?)
-rm -f /tmp/drupal.html
+	# Checks to see if "Drupal" exists on the frontpage
+	wget -q http://$DOMAIN/ -O /tmp/drupal.html && grep -q "Drupal" /tmp/drupal.html
+	DRUPAL=$(echo $?)
+	rm -f /tmp/drupal.html
 }
 
 function DRUPALRESULT {
-if [ $DRUPAL == '0' ]
-then
-	echo -e "\e[32mDrupal\c" && echo -e "\e[39m has been detected." && echo
-fi
+	if [ $DRUPAL == '0' ]
+	then
+		echo -e "\e[32mDrupal\c" && echo -e "\e[39m has been detected." && echo
+	fi
 }
 
 # Script
