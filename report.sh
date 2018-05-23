@@ -62,6 +62,12 @@ fi
 
 # Script
 
+# Test to see if required programs are installed on the system
+for p in dig whois wget curl; do 
+    hash "$p" &>/dev/null && echo "$p is installed" ||
+                 echo "WARNING: $p is not installed - Please install $p so that this script can function correctly."
+done 
+
 # Clears the screen for a clean working area
 echo -e "\f"
 
