@@ -59,13 +59,14 @@ then
 fi
 }
 
-
 # Script
 
 # Test to see if required programs are installed on the system
 for p in dig whois wget curl; do 
-    hash "$p" &>/dev/null && echo "$p is installed" ||
+    hash "$p" &>/dev/null && cat /dev/null ||
                  echo "WARNING: $p is not installed - Please install $p so that this script can function correctly."
+	hash "$p" &>/dev/null && cat /dev/null ||
+                 sleep 5
 done 
 
 # Clears the screen for a clean working area
