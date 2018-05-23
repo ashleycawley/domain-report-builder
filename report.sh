@@ -10,14 +10,39 @@
 
 # Functions
 function DNSTESTS {
-echo -e "Nameserver Records:"
-dig +short $DOMAIN NS && echo
+
+# Tests to see domain is a .com domain in prep for doing a .com NS Lookup
+echo $DOMAIN | grep -q -i ".com"
+COM=$(echo $?)
+
+if [ `echo $COM` == '0' ]
+then
+	echo "Nameserver Records:"
+	whois $DOMAIN | awk -F: '/Name Server/{print $2}'
+	echo
+fi
+
+# Tests to see if domain is a .co.uk domain in prep for doing a .co.uk NS Lookup
+echo $DOMAIN | grep -q -i ".co.uk"
+COUK=$(echo $?)
+if [ `echo $COUK` == '0' ]
+then
+	whois $DOMAIN | grep -A3 servers
+fi
+
+# De-activating this NS check below, because it just gets the stealth NS not the true NS
+#echo -e "Nameserver Records:"
+#dig +short $DOMAIN NS && echo
 
 echo -e "A Record: \c"
 dig +short $DOMAIN A && echo
 
 echo -e "MX Record: \c"
 dig +short $DOMAIN MX && echo
+}
+
+function DOTCOMNSLOOKUP {
+	whois $DOMAIN | awk -F: '/Name Server/{print $2}'
 }
 
 function LOOKUPWPSCODE {
@@ -61,6 +86,9 @@ fi
 
 # Script
 
+# Clears the screen for a clean working area
+echo -e "\f"
+
 # Test to see if required programs are installed on the system
 for p in dig whois wget curl; do 
     hash "$p" &>/dev/null && cat /dev/null ||
@@ -69,8 +97,7 @@ for p in dig whois wget curl; do
                  sleep 5
 done 
 
-# Clears the screen for a clean working area
-echo -e "\f"
+
 
 # Performs a test to see if a domains.txt file exists and if it does and it is greater than 5 bytes it uses it
 if [ `wc -c domains.txt 2>/dev/null | awk '{print $1}'` -gt '5' ] 2>/dev/null
@@ -108,22 +135,48 @@ then
 
 fi
 
-# Prompt the user for the Domain Name to build a report on
-read -p "Domain Name: " DOMAIN
+# Tests to see if an arguement was provided by the user to the script
+if [ $# -eq 0 ]
+then
 
-echo && echo "Analysing $DOMAIN ..." && echo
+	# Prompt the user for the Domain Name to build a report on
+	read -p "Domain Name: " DOMAIN
 
-# To understand the functions below see the functions and their comments toward the top of this file
-DNSTESTS
+	echo && echo "Analysing $DOMAIN ..." && echo
 
-# WordPress Tests
-LOOKUPWPSCODE
-LOOKUPLIC
-LOOKUPWPINDEX
-WORDPRESSRESULT
+	# To understand the functions below see the functions and their comments toward the top of this file
+	DNSTESTS
 
-# Drupal Tests
-DRUPALGREP
-DRUPALRESULT
+	# WordPress Tests
+	LOOKUPWPSCODE
+	LOOKUPLIC
+	LOOKUPWPINDEX
+	WORDPRESSRESULT
+
+	# Drupal Tests
+	DRUPALGREP
+	DRUPALRESULT
+
+	else
+
+		DOMAIN=$(echo $1)
+		echo && echo "Analysing $DOMAIN ..." && echo
+
+	# To understand the functions below see the functions and their comments toward the top of this file
+	DNSTESTS
+
+	# WordPress Tests
+	LOOKUPWPSCODE
+	LOOKUPLIC
+	LOOKUPWPINDEX
+	WORDPRESSRESULT
+
+	# Drupal Tests
+	DRUPALGREP
+	DRUPALRESULT
+
+	exit 0
+
+fi
 
 exit 0
