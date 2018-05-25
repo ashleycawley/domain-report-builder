@@ -1,12 +1,12 @@
 #!/bin/bash
 
-# Things I would like it to report:
+# Author: Ashley Cawley // @ashleycawley <-- Say Hi if you use this tool.
+
+# This tool will report the following:
 # - Website Type (WordPress, Drupal, Joomla etc)
 # - Nameservers
 # - A Record
 # - MX Record
-
-# Variables
 
 # Functions
 function DNSTESTS {
