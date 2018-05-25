@@ -11,7 +11,7 @@
 # Functions
 function DNSTESTS {
 
-	# Tests to see domain is a .com domain in prep for doing a .com NS Lookup
+# Tests to see domain is a .com domain in prep for doing a .com NS Lookup
 	echo $DOMAIN | grep -q -i ".com"
 	COM=$(echo $?)
 
@@ -22,7 +22,7 @@ function DNSTESTS {
 		echo
 	fi
 
-	# Tests to see if domain is a .co.uk domain in prep for doing a .co.uk NS Lookup
+# Tests to see if domain is a .co.uk domain in prep for doing a .co.uk NS Lookup
 	echo $DOMAIN | grep -q -i ".co.uk"
 	COUK=$(echo $?)
 	if [ `echo $COUK` == '0' ]
@@ -30,14 +30,10 @@ function DNSTESTS {
 		whois $DOMAIN | grep -A3 servers
 	fi
 
-	# De-activating this NS check below, because it just gets the stealth NS not the true NS
-	#echo -e "Nameserver Records:"
-	#dig +short $DOMAIN NS && echo
-
-	echo -e "A Record: \c"
+	echo -e "A Record:"
 	dig +short $DOMAIN A && echo
 
-	echo -e "MX Record: \c"
+	echo -e "MX Records:"
 	dig +short $DOMAIN MX && echo
 }
 
@@ -45,58 +41,52 @@ function DOTCOMNSLOOKUP {
 	whois $DOMAIN | awk -F: '/Name Server/{print $2}'
 }
 
-function LOOKUPWPSCODE {
-	# Retrieves the status code from visiting $DOMAIN/wp-login.php and saves it into a variable called $STATUSCODE
-	STATUSCODE=$(curl -o /dev/null --silent --head --write-out '%{http_code}\n' http://$DOMAIN/wp-login.php)
-}
+function CMSTESTS {
 
-function LOOKUPLIC {
-	# Checks to see if a licencse.txt file exists and whether it contains the word WordPress
+########## WORDPRESS ##########
+# WordPress Test - Retrieves status code from $DOMAIN/wp-login.php and saves into $STATUSCODE
+	STATUSCODE=$(curl -o /dev/null --silent --head --write-out '%{http_code}\n' http://$DOMAIN/wp-login.php)
+
+	# WordPress Test - Checks to see if a licencse.txt file exists and whether it contains the word 'WordPress'
 	curl --silent http://$DOMAIN/license.txt | grep -q "WordPress"
 	WPLIC=$(echo $?)
-}
 
-function LOOKUPWPINDEX {
-	# Checks to see if a licencse.txt file exists and whether it contains the word WordPress
+	# WordPress Test - Searches the source-code of the homepage to see if it contains the word 'WordPress'
 	curl --silent http://$DOMAIN/ | grep -q "WordPress"
 	WPINDEX=$(echo $?)
-}
 
-function WORDPRESSRESULT {
+	# WordPress Result - If any of the above WordPress Tests are true then it echos "WordPress has been detected."
 	if [ $STATUSCODE == "200" ] || [ $WPLIC == "0" ] || [ $WPINDEX == "0" ]
-			then
-					echo -e "\e[32mWordPress\c" && echo -e "\e[39m has been detected." && echo
+	then
+		echo -e "\e[32mWordPress\c" && echo -e "\e[39m has been detected." && echo
 
-			fi
-}
-
-function DRUPALGREP {
-	# Checks to see if "Drupal" exists on the frontpage
+	fi
+	
+	########## DRUPAL ##########
+	# Drupal Test - Searches the source-code of the homepage to see if it contains the word 'Drupal'
 	wget -q http://$DOMAIN/ -O /tmp/drupal.html && grep -q "Drupal" /tmp/drupal.html
 	DRUPAL=$(echo $?)
 	rm -f /tmp/drupal.html
-}
 
-function DRUPALRESULT {
+	# Drupal Result - If any of the above Drupal Tests are true this echos "Drupal has been detected."
 	if [ $DRUPAL == '0' ]
 	then
 		echo -e "\e[32mDrupal\c" && echo -e "\e[39m has been detected." && echo
 	fi
-}
 
-function JOOMLAGREP {
+	########## JOOMLA ##########	
+	# Joomla Test - Searches the source-code of the homepage to see if it contains the word 'Joomla'
 	wget -q http://$DOMAIN/ -O /tmp/joomla.html && grep -q "Joomla" /tmp/joomla.html
 	JOOMLA=$(echo $?)
 	rm -f /tmp/joomla.html
-}
 
-function JOOMLARESULT {
-		if [ $JOOMLA == '0' ]
-		then
-			echo -e "\e[32mJoomla\c" && echo -e "\e[39m has been detected." && echo
+	# Joomla Result - If any of the above Joomla Tests are true this echos "Joomla has been detected."
+	if [ $JOOMLA == '0' ]
+	then
+		echo -e "\e[32mJoomla\c" && echo -e "\e[39m has been detected." && echo
 	fi
-}
 
+}
 
 # Script
 
@@ -129,20 +119,8 @@ then
 		# To understand the functions below see the functions and their comments toward the top of this file
 		DNSTESTS 
 
-		# WordPress Tests
-		LOOKUPWPSCODE
-		LOOKUPLIC
-		LOOKUPWPINDEX
-		WORDPRESSRESULT
-
-		# Drupal Tests
-		DRUPALGREP
-		DRUPALRESULT
-
-		# Joomla Tests
-		JOOMLAGREP
-		JOOMLARESULT
-
+		# CMS Tests
+		CMSTESTS
 		echo "=====================================================" && echo
 
 	done < domains.txt
@@ -165,19 +143,8 @@ then
 	# To understand the functions below see the functions and their comments toward the top of this file
 	DNSTESTS
 
-	# WordPress Tests
-	LOOKUPWPSCODE
-	LOOKUPLIC
-	LOOKUPWPINDEX
-	WORDPRESSRESULT
-
-	# Drupal Tests
-	DRUPALGREP
-	DRUPALRESULT
-
-	# Joomla Tests
-	JOOMLAGREP
-	JOOMLARESULT
+        # CMS Tests
+	CMSTESTS
 
 	else
 
@@ -187,19 +154,8 @@ then
 	# To understand the functions below see the functions and their comments toward the top of this file
 	DNSTESTS
 
-	# WordPress Tests
-	LOOKUPWPSCODE
-	LOOKUPLIC
-	LOOKUPWPINDEX
-	WORDPRESSRESULT
-
-	# Drupal Tests
-	DRUPALGREP
-	DRUPALRESULT
-
-	# Joomla Tests
-	JOOMLAGREP
-	JOOMLARESULT
+        # CMS Tests
+	CMSTESTS
 
 	exit 0
 
