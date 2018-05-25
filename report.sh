@@ -84,6 +84,20 @@ function DRUPALRESULT {
 	fi
 }
 
+function JOOMLAGREP {
+	wget -q http://$DOMAIN/ -O /tmp/joomla.html && grep -q "Joomla" /tmp/joomla.html
+	JOOMLA=$(echo $?)
+	rm -f /tmp/joomla.html
+}
+
+function JOOMLARESULT {
+		if [ $JOOMLA == '0' ]
+		then
+			echo -e "\e[32mJoomla\c" && echo -e "\e[39m has been detected." && echo
+	fi
+}
+
+
 # Script
 
 # Clears the screen for a clean working area
@@ -125,6 +139,10 @@ then
 		DRUPALGREP
 		DRUPALRESULT
 
+		# Joomla Tests
+		JOOMLAGREP
+		JOOMLARESULT
+
 		echo "=====================================================" && echo
 
 	done < domains.txt
@@ -157,6 +175,10 @@ then
 	DRUPALGREP
 	DRUPALRESULT
 
+	# Joomla Tests
+	JOOMLAGREP
+	JOOMLARESULT
+
 	else
 
 		DOMAIN=$(echo $1)
@@ -174,6 +196,10 @@ then
 	# Drupal Tests
 	DRUPALGREP
 	DRUPALRESULT
+
+	# Joomla Tests
+	JOOMLAGREP
+	JOOMLARESULT
 
 	exit 0
 
