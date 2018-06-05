@@ -5,6 +5,7 @@ It utilises tools like dig and whois to show you the main DNS Records like:
 - DNS A Record
 - DNS MX Record
 - Nameserver Records
+- Registrar Tag
 
 And can detected a range of different CMS types. A typical output from the program might look like this:
 
