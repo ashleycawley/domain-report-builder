@@ -2,13 +2,17 @@
 
 # Author: Ashley Cawley // @ashleycawley <-- Say Hi if you use this tool.
 
-# This is a subtle change for deployment testing purposes.
-
 # This tool will report the following:
 # - Website Type (WordPress, Drupal, Joomla etc)
 # - Nameservers
 # - A Record
 # - MX Record
+
+# Further CMS checks I would like to add in future:
+# Magento
+# Umbraco
+# PrestaShop
+# concrete5
 
 # Functions
 function DNSTESTS {
