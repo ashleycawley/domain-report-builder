@@ -22,6 +22,8 @@ function DNSTESTS {
 		echo "Nameserver Records:"
 		whois $DOMAIN | awk -F: '/Name Server/{print $2}'
 		echo
+		whois $DOMAIN | grep -i 'Registrar:' && echo
+		echo
 	fi
 
 # Tests to see if domain is a .co.uk domain in prep for doing a .co.uk NS Lookup
@@ -30,6 +32,9 @@ function DNSTESTS {
 	if [ `echo $COUK` == '0' ]
 	then
 		whois $DOMAIN | grep -A3 servers
+		echo
+		echo -e "Registrar Tag: \c"
+		whois $DOMAIN | grep -i Tag && echo
 	fi
 
 # Performs DNS A & MX Record Lookups
