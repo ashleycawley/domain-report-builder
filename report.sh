@@ -57,14 +57,14 @@ function CMSTESTS {
 
 	########## WORDPRESS ##########
 # WordPress Test - Retrieves status code from $DOMAIN/wp-login.php and saves into $STATUSCODE
-	STATUSCODE=$(curl -o /dev/null --silent --head --write-out '%{http_code}\n' http://$DOMAIN/wp-login.php)
+	STATUSCODE=$(curl -L -o /dev/null --silent --head --write-out '%{http_code}\n' http://$DOMAIN/wp-login.php)
 
 # WordPress Test - Checks to see if a licencse.txt file exists and whether it contains the word 'WordPress'
-	curl --silent http://$DOMAIN/license.txt | grep -q "WordPress"
+	curl -L --silent http://$DOMAIN/license.txt | grep -q "WordPress"
 	WPLIC=$(echo $?)
 
 # WordPress Test - Searches the source-code of the homepage to see if it contains the word 'WordPress'
-	curl --silent http://$DOMAIN/ | grep -q "WordPress"
+	curl -L --silent http://$DOMAIN/ | grep -q "WordPress"
 	WPINDEX=$(echo $?)
 
 # WordPress Result - If any of the above WordPress Tests are true then it echos "WordPress has been detected."
@@ -98,7 +98,16 @@ function CMSTESTS {
 		echo -e "\e[32mJoomla\c" && echo -e "\e[39m has been detected." && echo
 	fi
 
+	########## MAGENTO ##########
+# Magento Test - Searches the source-code of the home page to see if it contains /skin/frontend/
+	curl --silent -L http://$DOMAIN/ | grep -q "/skin/frontend/"
+        MAGESTATUS=$(echo $?)
+	if [ $MAGESTATUS == '0' ]
+	then
+	echo -e "\e[32mMagento\c" && echo -e "\e[39m has been detected." && echo
+	fi
 }
+
 
 # Script
 
