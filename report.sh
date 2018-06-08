@@ -3,13 +3,12 @@
 # Author: Ashley Cawley // @ashleycawley <-- Say Hi if you use this tool.
 
 # This tool will report the following:
-# - Website Type (WordPress, Drupal, Joomla, Magento etc)
+# - Website Type (WordPress, Drupal, Joomla, Magento, Umbraco etc)
 # - Nameservers
 # - A Record
 # - MX Record
 
 # Further CMS checks I would like to add in future:
-# Umbraco
 # PrestaShop
 # concrete5
 
@@ -106,13 +105,22 @@ function CMSTESTS {
 		echo -e "\e[32mMagento\c" && echo -e "\e[39m has been detected." && echo
 	fi
         ########## Umbraco ##########
-# Umbraco Test -
+# Umbraco Test - Checks to see if the default Umbraco login page is present
 	curl --silent -L http://$DOMAIN/umbraco/login.aspx | grep -i -q "umbraco"
 	UMBRACOSTATUS=$(echo $?)
 	if [ $UMBRACOSTATUS == '0' ]
 	then
 		echo -e "\e[32mUmbraco\c" && echo -e "\e[39m has been detected." && echo
 	fi
+
+        ########## PrestaShop ##########
+# PrestaShop Test - Checks to see if the word PrestaShop is present in the homepage source code
+        curl --silent -L http://$DOMAIN/ | grep -i -q "prestashop"
+        PRESTASHOPSTATUS=$(echo $?)
+        if [ $PRESTASHOPSTATUS == '0' ]
+        then
+                echo -e "\e[32mPrestaShop\c" && echo -e "\e[39m has been detected." && echo
+        fi
 }
 
 # Script
