@@ -3,13 +3,12 @@
 # Author: Ashley Cawley // @ashleycawley <-- Say Hi if you use this tool.
 
 # This tool will report the following:
-# - Website Type (WordPress, Drupal, Joomla, Magento, Umbraco etc)
+# - Website Type (WordPress, Drupal, Joomla, Magento, Umbraco, PrestaShop etc)
 # - Nameservers
 # - A Record
 # - MX Record
 
 # Further CMS checks I would like to add in future:
-# PrestaShop
 # concrete5
 
 # Functions
