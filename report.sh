@@ -103,10 +103,17 @@ function CMSTESTS {
         MAGESTATUS=$(echo $?)
 	if [ $MAGESTATUS == '0' ]
 	then
-	echo -e "\e[32mMagento\c" && echo -e "\e[39m has been detected." && echo
+		echo -e "\e[32mMagento\c" && echo -e "\e[39m has been detected." && echo
+	fi
+        ########## Umbraco ##########
+# Umbraco Test -
+	curl --silent -L http://$DOMAIN/umbraco/login.aspx | grep -i -q "umbraco"
+	UMBRACOSTATUS=$(echo $?)
+	if [ $UMBRACOSTATUS == '0' ]
+	then
+		echo -e "\e[32mUmbraco\c" && echo -e "\e[39m has been detected." && echo
 	fi
 }
-
 
 # Script
 
