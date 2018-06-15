@@ -105,12 +105,13 @@ function CMSTESTS {
 	fi
         ########## Umbraco ##########
 # Umbraco Test - Checks to see if the default Umbraco login page is present
-	curl --silent -L http://$DOMAIN/umbraco/login.aspx | grep -i -q "umbraco"
-	UMBRACOSTATUS=$(echo $?)
-	if [ $UMBRACOSTATUS == '0' ]
-	then
-		echo -e "\e[32mUmbraco\c" && echo -e "\e[39m has been detected." && echo
-	fi
+	# curl -Is http://$DOMAIN/umbraco/login.aspx | grep 'HTTP' | grep -q '200'
+	# Old test was showing some false positives: curl --silent -L http://$DOMAIN/umbraco/login.aspx | grep -i -q "umbraco"
+	# UMBRACOSTATUS=$(echo $?)
+	# if [ `echo $?` == '0' ]
+	# then
+	#	echo -e "\e[32mUmbraco\c" && echo -e "\e[39m has been detected." && echo
+	# fi
 
         ########## PrestaShop ##########
 # PrestaShop Test - Checks to see if the word PrestaShop is present in the homepage source code
