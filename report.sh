@@ -85,7 +85,7 @@ function CMSTESTS {
 
 	########## JOOMLA ##########	
 # Joomla Test - Searches the source-code of the homepage to see if it contains the word 'Joomla'
-	wget -q http://$DOMAIN/ -O /tmp/joomla.html && grep -q "Joomla" /tmp/joomla.html
+	wget -q http://$DOMAIN/ -O /tmp/joomla.html && grep -q -i "Joomla" /tmp/joomla.html
 	JOOMLA=$(echo $?)
 	rm -f /tmp/joomla.html
 
