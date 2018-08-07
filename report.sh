@@ -57,11 +57,11 @@ function CMSTESTS {
 	STATUSCODE=$(curl -L -o /dev/null --silent --head --write-out '%{http_code}\n' http://$DOMAIN/wp-login.php)
 
 # WordPress Test - Checks to see if a licencse.txt file exists and whether it contains the word 'WordPress'
-	curl -L --silent http://$DOMAIN/license.txt | grep -q "WordPress"
+	curl -L --silent http://$DOMAIN/license.txt | grep -q -i "WordPress"
 	WPLIC=$(echo $?)
 
 # WordPress Test - Searches the source-code of the homepage to see if it contains the word 'WordPress'
-	curl -L --silent http://$DOMAIN/ | grep -q "WordPress"
+	curl -L --silent http://$DOMAIN/ | grep -q -i "WordPress"
 	WPINDEX=$(echo $?)
 
 # WordPress Result - If any of the above WordPress Tests are true then it echos "WordPress has been detected."
@@ -73,7 +73,7 @@ function CMSTESTS {
 	
 	########## DRUPAL ##########
 # Drupal Test - Searches the source-code of the homepage to see if it contains the word 'Drupal'
-	wget -q http://$DOMAIN/ -O /tmp/drupal.html && grep -q "Drupal" /tmp/drupal.html
+	wget -q http://$DOMAIN/ -O /tmp/drupal.html && grep -q -i "Drupal" /tmp/drupal.html
 	DRUPAL=$(echo $?)
 	rm -f /tmp/drupal.html
 
@@ -97,7 +97,7 @@ function CMSTESTS {
 
 	########## MAGENTO ##########
 # Magento Test - Searches the source-code of the home page to see if it contains /skin/frontend/
-	curl --silent -L http://$DOMAIN/ | grep -q "/skin/frontend/"
+	curl --silent -L http://$DOMAIN/ | grep -q -i "/skin/frontend/"
         MAGESTATUS=$(echo $?)
 	if [ $MAGESTATUS == '0' ]
 	then
