@@ -14,18 +14,28 @@
 # Functions
 function DNSTESTS {
 
+	function COMORGWHOIS {
+	# WHOIS test performed on .com or .org domains
+                whois $DOMAIN | awk -F: '/Name Server/{print $2}'
+		}
+
 # Tests to see domain is a .com domain in prep for doing a .com NS Lookup
 	echo $DOMAIN | grep -q -i ".com"
 	COM=$(echo $?)
 
 	if [ `echo $COM` == '0' ]
 	then
-		echo "Nameserver Records:"
-		whois $DOMAIN | awk -F: '/Name Server/{print $2}'
-		echo
-		whois $DOMAIN | grep -i 'Registrar:' && echo
-		echo
+		COMORGWHOIS
 	fi
+
+# Tests to see domain is a .org
+        echo $DOMAIN | grep -q -i ".org"
+        ORG=$(echo $?)
+
+        if [ `echo $ORG` == '0' ]
+        then
+                COMORGWHOIS
+        fi
 
 # Tests to see if domain contains ".uk" so this will encompass .co.uk or .uk domains
 
