@@ -16,7 +16,9 @@ function DNSTESTS {
 
 	function COMORGWHOIS {
 	# WHOIS test performed on .com or .org domains
-                whois $DOMAIN | awk -F: '/Name Server/{print $2}'
+                echo "Nameserver Records:"
+		whois $DOMAIN | awk -F: '/Name Server/{print $2}'
+		echo
 		}
 
 # Tests to see domain is a .com domain in prep for doing a .com NS Lookup
