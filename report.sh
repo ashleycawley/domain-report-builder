@@ -27,10 +27,13 @@ function DNSTESTS {
 		echo
 	fi
 
-# Tests to see if domain is a .co.uk domain in prep for doing a .co.uk NS Lookup
-	echo $DOMAIN | grep -q -i ".co.uk"
-	COUK=$(echo $?)
-	if [ `echo $COUK` == '0' ]
+# Tests to see if domain contains ".uk" so this will encompass .co.uk or .uk domains
+
+        echo $DOMAIN | grep -q -i ".uk"
+        UK=$(echo $?)
+
+
+	if [ `echo $UK` == '0' ]
 	then
 		whois $DOMAIN | grep -A3 servers
 		echo
